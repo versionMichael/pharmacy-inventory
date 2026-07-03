@@ -1,0 +1,3 @@
+tylenol, 3
+advil, 33
+metformin, 99
