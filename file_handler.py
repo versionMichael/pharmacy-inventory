@@ -1,6 +1,5 @@
 def save_inventory(inventory):
     file = open("test.txt", "w")
-    #file.write("hello pharmacy")
     for medicine in inventory:
         data = medicine["name"] + ", " + str(medicine["quantity"]) +"\n"
         file.write(data)    
