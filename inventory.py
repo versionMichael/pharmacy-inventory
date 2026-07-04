@@ -1,4 +1,7 @@
-def view_inventory(inventory):
+import database
+
+def view_inventory():
+    inventory = database.get_all_medicines()
     if not inventory:
         print("=====Inventory=====")
         print()
@@ -6,62 +9,68 @@ def view_inventory(inventory):
     else:
         print("=====Inventory=====")
         print()
+        print(f"{'ID':<4}{'Name':<20}{'Qty':<8}NDC")
+        print("-----------------------------------------------")
     for medicine in inventory:            
-        print()
-        print("Name: ", medicine["name"])
-        print("Quantity: ", medicine["quantity"])
-        print()
+        print(f"{medicine['id']:<4}{medicine["name"]:<20}{medicine["quantity"]:<8}{medicine["ndc"]}")
+        # print("Name:", medicine["name"])
+        # print("Quantity:", medicine["quantity"])
+        # print("NDC:", medicine["ndc"])
+    print("-----------------------------------------------")
 
-def add_medicine(inventory):
-    name = input("Medicine name: ")
-    quantity = int(input("Medicine quantity: "))
-    medicine = {
-        "name" : name,
-        "quantity" : quantity
-    }
-    inventory.append(medicine)
+def add_medicine():
+    name = get_non_empty_input("Medicine name: ")
+    quantity = get_valid_quantity("Medicine quantity: ")
+    ndc = get_non_empty_input("NDC: ")
+    if database.ndc_exists(ndc):
+        print("A medicine with that NDC already exists.")
+    else:
+        database.add_medicine(name,quantity,ndc)
 
-def remove_medicine(inventory):
-    if not inventory:
-        print("Nothing to remove")
-        return
-    remove = input("Name of medicine you want removed: ")
-    for medicine in inventory:
-        if medicine["name"] == remove:
-            inventory.remove(medicine)
-            print("Medicine Removed")
-            break
+def remove_medicine():
+    name = input("Name of medicine you want removed: ")
+    success = database.remove_medicine(name)
+    if success:
+        print("Medicine removed")
+    else:
+        print("Medicine not found")
+    
+def search_inventory():
+    search = input("Medicine name: ").strip()
+    name = database.search_medicine(search)
+    if name is None:
+        print("Medicine not found")
+    else:
+        print(f"Name: {name['name']}")
+        print(f"Quantity: {name['quantity']}")
+        print(f"NDC: {name['ndc']}")
+
+def update_quantity():
+    medicine_name = input("Medicine name: ").strip()
+    new_quantity = get_valid_quantity("New quantity: ")
+    success = database.update_quantity(medicine_name, new_quantity)
+    if success:
+        print("Medicine quantity updated")
+    else:
+        print("Medicine not found")
+
+def get_valid_quantity(prompt):
+    while True:
+        try:
+            quantity = int(input(prompt))
+            if quantity <0:
+                print("quantity cannot be negative")
+            else:
+                return quantity
+        except ValueError:
+            print("Invalid quantity. Please enter a number.")
+
+
+def get_non_empty_input(prompt):
+    while True:
+        text = input(prompt).strip()
+
+        if text == "":
+            print("Input can not be empty.")
         else:
-            print("Medicine not in inventory")
-
-def search_inventory(inventory):
-    if not inventory:
-        print("Nothing to search")
-        return
-    search = input("Medicine name: ").strip().lower()
-    if not inventory:
-        print("List is empty")
-        return
-    for medicine in inventory:
-        if search == medicine["name"].lower():
-            print("Medicine found!")
-            print("Name: ", medicine["name"])
-            print("Quantity: ", medicine["quantity"])
-            break
-    else:
-        print("Medicine not found")
-
-def update_quantity(inventory):
-    if not inventory:
-        print("Nothing to update")
-        return
-    medicine_name = input("What medications quantity would you like to update? ").strip().lower()
-    for medicine in inventory:
-        if medicine_name == medicine["name"].lower():
-            update = int(input("What will be the new quantity?"))
-            medicine["quantity"] = update
-            print("Quantity updated!")
-            break
-            
-    else:
-        print("Medicine not found")
+            return text
