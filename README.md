@@ -1,37 +1,78 @@
-# Pharmacy Inventory
+# Pharmacy Inventory API
 
 ## Description
 
-This project is a command-line pharmacy inventory system written in Python. It allows users to manage a list of medicines by adding, removing, searching, and updating inventory while saving data between sessions.
+A RESTful Pharmacy Inventory API built with FastAPI and SQLite. The application allows users to manage pharmacy inventory through HTTP endpoints with full CRUD functionality, request validation, proper HTTP status codes, and interactive API documentation.
 
 ## Features
 
-- Add medicine
-- Remove medicine
+- View all medicines
+- Search for a medicine by name
+- Add new medicines
 - Update medicine quantity
-- View inventory
-- Search for a medicine
-- Save inventory data
-- Load inventory data
-- Handle invalid menu input
+- Delete medicines
+- Prevent duplicate NDC numbers
+- Automatic request validation with Pydantic
+- Proper HTTP status codes (201, 404, 409, etc.)
+- Interactive Swagger documentation (`/docs`)
 
 ## Technologies Used
 
 - Python
+- FastAPI
+- SQLite
+- Pydantic
+- Uvicorn
 - Git
 - GitHub
-- Text file storage
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/medicines` | Get all medicines |
+| GET | `/medicines/{name}` | Search for a medicine |
+| POST | `/medicines` | Add a medicine |
+| PUT | `/medicines/{name}` | Update medicine quantity |
+| DELETE | `/medicines/{name}` | Remove a medicine |
 
 ## How to Run
 
 1. Clone the repository.
-2. Open the project in your preferred IDE (such as VS Code).
-3. Run `main.py`.
+2. Install dependencies:
 
+```bash
+pip install fastapi uvicorn
+```
 
-## Future Improvements
+3. Start the API:
 
-- Replace text file storage with SQLite
-- Build a FastAPI version
-- Add user authentication
-- Add unit tests
+```bash
+python -m uvicorn main:app --reload
+```
+
+4. Open your browser and navigate to:
+
+```
+http://127.0.0.1:8000/docs
+```
+
+## Roadmap Progress
+
+### ✅ Completed
+
+- [x] Replace text file storage with SQLite
+- [x] Convert command-line application to a FastAPI REST API
+- [x] Implement CRUD API endpoints
+- [x] Add request validation with Pydantic
+- [x] Add proper HTTP status codes
+- [x] Add response models
+
+### 🚧 In Progress
+
+- [ ] Migrate from SQLite to PostgreSQL
+- [ ] Replace raw SQL with SQLAlchemy
+- [ ] Add JWT authentication
+- [ ] Dockerize the application
+- [ ] Deploy to the cloud
+- [ ] Add automated tests

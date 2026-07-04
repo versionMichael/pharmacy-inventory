@@ -1,6 +1,6 @@
 import sqlite3
 
-connection = sqlite3.connect("pharmacy.db")
+connection = sqlite3.connect("pharmacy.db", check_same_thread=False)
 connection.row_factory = sqlite3.Row
 
 cursor = connection.cursor()
