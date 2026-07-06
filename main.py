@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 import database
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 app = FastAPI()
@@ -16,11 +16,13 @@ class MedicineResponse(BaseModel):
     quantity: int
     ndc : str
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class QuantityUpdate(BaseModel):
     quantity : int
 
-@app.get("/medicines")
+@app.get("/medicines", response_model=list[MedicineResponse])
 def get_medicines():
     return database.get_all_medicines()
 
@@ -52,7 +54,7 @@ def search_medicine(name : str):
             detail="Medicine not found"
         )
     
-    return dict(medicine)
+    return medicine
 
 @app.put("/medicines/{name}")
 def update_quantity(name : str, medicine: QuantityUpdate):

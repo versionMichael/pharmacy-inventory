@@ -1,58 +1,61 @@
-import psycopg
-from psycopg.rows import dict_row
+from sqlalchemy import create_engine, select, func
+from sqlalchemy.orm import sessionmaker
+from models import Base, Medicine
 
-connection = psycopg.connect(
-    host="localhost",
-    dbname="pharmacy_inventory",
-    user="postgres",
-    password="3921",
-    port=5432
-)
-cursor = connection.cursor(row_factory=dict_row)
 
-cursor.execute("SELECT * FROM medicines")
-rows = cursor.fetchall()
+DATABASE_URL = "postgresql+psycopg://postgres:3921@localhost/pharmacy_inventory"
+engine = create_engine(DATABASE_URL)
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
+Base.metadata.create_all(engine)
+
 
 def get_all_medicines():
-    cursor.execute("SELECT * FROM medicines")
-    rows = cursor.fetchall()
-    return rows
+    statement = select(Medicine)
+    result = session.execute(statement)
+    medicines = result.scalars().all()
+    return medicines
+
 
 def add_medicine(name, quantity, ndc):
-    cursor.execute(
-        "INSERT INTO medicines (name, quantity, ndc) VALUES (%s, %s, %s)",
-        (name, quantity, ndc)
-    )
-    connection.commit()
-
-def remove_medicine(name):
-    cursor.execute(
-        "DELETE FROM medicines WHERE LOWER(name) = LOWER(%s)",
-        (name,)
-    )
-    check = cursor.rowcount
-    connection.commit()
-    return check > 0
-
-def update_quantity(name, quantity):
-    cursor.execute(
-        "UPDATE medicines SET quantity = %s WHERE LOWER(name) = LOWER(%s)",
-        (quantity, name)
-    )
-    check = cursor.rowcount
-    connection.commit()
-    return check > 0
+    medicine = Medicine(name=name, quantity = quantity,ndc = ndc)
+    session.add(medicine)
+    session.commit()
+    
 
 def search_medicine(name):
-    cursor.execute("SELECT * FROM MEDICINES WHERE LOWER(name) = LOWER(%s)", (name,))
-    searched = cursor.fetchone() 
-    return searched
-
-def ndc_exists(ndc):
-    cursor.execute("SELECT * FROM MEDICINES WHERE ndc = %s", (ndc,))
-    medicine = cursor.fetchone()
+    statement = select(Medicine).where(
+         func.lower(Medicine.name) == func.lower(name))
+    result = session.execute(statement)
+    medicine = result.scalars().first()
     return medicine
 
+def ndc_exists(ndc):
+    statement = select(Medicine).where(Medicine.ndc == ndc)
+    result = session.execute(statement)
+    medicine = result.scalars().first()
+    return medicine
+
+def update_quantity(name, quantity):
 
 
-print(get_all_medicines())
+    medicine = search_medicine(name)
+
+    if medicine is None:
+            return False
+
+    medicine.quantity = quantity
+    session.commit()
+    return True
+
+def remove_medicine(name):
+    medicine = search_medicine(name)
+
+    if medicine is None:
+        return False
+
+    session.delete(medicine)
+    session.commit()
+    return True
