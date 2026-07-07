@@ -105,10 +105,11 @@ Pharmacy_inventory/
 - [x] Migrate from SQLite to PostgreSQL
 - [x] Refactor raw SQL to SQLAlchemy ORM
 - [x] Implement case-insensitive medicine searches
+- [x] JWT Authentication
 
 ### 🚧 Coming Next
 
-- [ ] JWT Authentication
+
 - [ ] Docker
 - [ ] Cloud Deployment
 - [ ] Automated Testing

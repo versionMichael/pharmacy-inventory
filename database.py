@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, select, func
 from sqlalchemy.orm import sessionmaker
-from models import Base, Medicine
+from models import Base, Medicine, User
 
 
 DATABASE_URL = "postgresql+psycopg://postgres:3921@localhost/pharmacy_inventory"
@@ -59,3 +59,19 @@ def remove_medicine(name):
     session.delete(medicine)
     session.commit()
     return True
+
+def create_user(username, hashed_password):
+     user = User(
+          username = username,
+          hashed_password = hashed_password
+     )
+     session.add(user)
+     session.commit()
+
+def get_user(username):
+     statement = select(User).where(
+          func.lower(User.username)== func.lower(username)
+          )
+     result = session.execute(statement)
+     user = result.scalars().first()
+     return user
