@@ -2,10 +2,16 @@
 
 ## Description
 
-A RESTful Pharmacy Inventory API built with FastAPI, PostgreSQL, and SQLAlchemy. The application allows users to manage pharmacy inventory through HTTP endpoints with full CRUD functionality, request validation, proper HTTP status codes, and interactive API documentation.
+A RESTful Pharmacy Inventory API built with FastAPI, PostgreSQL, SQLAlchemy, and JWT authentication. The application allows users to register, authenticate, and securely manage pharmacy inventory through protected HTTP endpoints with full CRUD functionality, request validation, proper HTTP status codes, and interactive API documentation.
+
+---
 
 ## Features
 
+- User registration
+- Secure login with JWT authentication
+- Password hashing with bcrypt
+- Protected medicine endpoints
 - View all medicines
 - Search for a medicine by name (case-insensitive)
 - Add new medicines
@@ -14,8 +20,10 @@ A RESTful Pharmacy Inventory API built with FastAPI, PostgreSQL, and SQLAlchemy.
 - Prevent duplicate NDC numbers
 - Automatic request validation with Pydantic
 - Response models for consistent API responses
-- Proper HTTP status codes (201, 404, 409, etc.)
+- Proper HTTP status codes (201, 401, 404, 409, etc.)
 - Interactive Swagger API documentation (`/docs`)
+
+---
 
 ## Technologies Used
 
@@ -25,19 +33,27 @@ A RESTful Pharmacy Inventory API built with FastAPI, PostgreSQL, and SQLAlchemy.
 - SQLAlchemy
 - Psycopg
 - Pydantic
+- python-jose (JWT)
+- Passlib (bcrypt)
 - Uvicorn
 - Git
 - GitHub
+
+---
 
 ## API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/medicines` | Retrieve all medicines |
-| GET | `/medicines/{name}` | Retrieve a medicine by name |
-| POST | `/medicines` | Add a new medicine |
-| PUT | `/medicines/{name}` | Update a medicine's quantity |
-| DELETE | `/medicines/{name}` | Delete a medicine |
+| POST | `/register` | Register a new user |
+| POST | `/login` | Authenticate a user and receive a JWT |
+| GET | `/medicines` | Retrieve all medicines *(Requires authentication)* |
+| GET | `/medicines/{name}` | Retrieve a medicine by name *(Requires authentication)* |
+| POST | `/medicines` | Add a new medicine *(Requires authentication)* |
+| PUT | `/medicines/{name}` | Update a medicine's quantity *(Requires authentication)* |
+| DELETE | `/medicines/{name}` | Delete a medicine *(Requires authentication)* |
+
+---
 
 ## Installation
 
@@ -78,6 +94,8 @@ python -m uvicorn main:app --reload
 http://127.0.0.1:8000/docs
 ```
 
+---
+
 ## Project Structure
 
 ```text
@@ -86,10 +104,13 @@ Pharmacy_inventory/
 ├── main.py              # FastAPI application and API endpoints
 ├── database.py          # SQLAlchemy database operations
 ├── models.py            # SQLAlchemy models
+├── auth.py              # Password hashing and JWT authentication
 ├── requirements.txt
 ├── README.md
 └── .gitignore
 ```
+
+---
 
 ## Roadmap Progress
 
@@ -105,11 +126,10 @@ Pharmacy_inventory/
 - [x] Migrate from SQLite to PostgreSQL
 - [x] Refactor raw SQL to SQLAlchemy ORM
 - [x] Implement case-insensitive medicine searches
-- [x] JWT Authentication
+- [x] Implement JWT authentication and protected endpoints
 
 ### 🚧 Coming Next
 
-
+- [ ] Automated testing with pytest
 - [ ] Docker
-- [ ] Cloud Deployment
-- [ ] Automated Testing
+- [ ] Cloud deployment
