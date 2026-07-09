@@ -61,6 +61,12 @@ def get_current_user(token : str = Depends(oauth2_scheme)):
     
     return user
 
+@app.get("/")
+def root():
+    return {"message": "Pharmacy Inventory API"}
+
+
+
 @app.get("/medicines", response_model=list[MedicineResponse])
 def get_medicines(current_user= Depends(get_current_user)):
     return database.get_all_medicines()
@@ -140,5 +146,4 @@ def login(user : OAuth2PasswordRequestForm = Depends()):
         "access_token" : access_token,
         "token_type" : "bearer"
     }
-
 
