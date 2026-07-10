@@ -55,7 +55,7 @@ def test_register_user():
 
 def test_register_duplicate_user():
 
-    #arrange
+    
     user = create_test_user()
     register_response = client.post(
         "/register",
@@ -63,13 +63,13 @@ def test_register_duplicate_user():
 
     )
     assert register_response.status_code == 201
-    # act
+    
     response = client.post(
         "/register",
         json=user
     )
 
-    #assert
+    
     assert response.status_code == 409
     assert response.json() == {
         "detail" : "Username already taken"
@@ -195,7 +195,7 @@ def test_register_user():
 
 def test_register_duplicate_user():
 
-    #arrange
+    
     user = create_test_user()
     register_response = client.post(
         "/register",
@@ -203,13 +203,13 @@ def test_register_duplicate_user():
 
     )
     assert register_response.status_code == 201
-    # act
+    
     response = client.post(
         "/register",
         json=user
     )
 
-    #assert
+    
     assert response.status_code == 409
     assert response.json() == {
         "detail" : "Username already taken"
