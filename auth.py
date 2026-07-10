@@ -2,7 +2,10 @@ from passlib.context import CryptContext
 from jose import jwt
 from datetime import datetime, timedelta, UTC 
 from fastapi.security import OAuth2PasswordBearer
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 
 pwd_context = CryptContext(
@@ -10,7 +13,7 @@ pwd_context = CryptContext(
     deprecated="auto"
 )
 
-SECRET_KEY = "CHANGE_THIS_TO_A_RANDOM_SECRET_KEY"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -32,6 +35,3 @@ def create_access_token(data : dict):
         SECRET_KEY,
         algorithm=ALGORITHM
     )
-
-
-
