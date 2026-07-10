@@ -2,7 +2,7 @@
 
 ## Description
 
-A RESTful Pharmacy Inventory API built with FastAPI, PostgreSQL, SQLAlchemy, and JWT authentication. The application allows users to register, authenticate, and securely manage pharmacy inventory through protected HTTP endpoints with full CRUD functionality, request validation, proper HTTP status codes, and interactive API documentation.
+A RESTful Pharmacy Inventory API built with FastAPI, PostgreSQL, SQLAlchemy, and JWT authentication. The application allows users to register, authenticate, and securely manage pharmacy inventory through protected HTTP endpoints with full CRUD functionality, request validation, proper HTTP status codes, interactive API documentation, and automated integration testing.
 
 ---
 
@@ -22,6 +22,7 @@ A RESTful Pharmacy Inventory API built with FastAPI, PostgreSQL, SQLAlchemy, and
 - Response models for consistent API responses
 - Proper HTTP status codes (201, 401, 404, 409, etc.)
 - Interactive Swagger API documentation (`/docs`)
+- Automated integration testing with pytest
 
 ---
 
@@ -36,6 +37,7 @@ A RESTful Pharmacy Inventory API built with FastAPI, PostgreSQL, SQLAlchemy, and
 - python-jose (JWT)
 - Passlib (bcrypt)
 - Uvicorn
+- Pytest
 - Git
 - GitHub
 
@@ -96,6 +98,25 @@ http://127.0.0.1:8000/docs
 
 ---
 
+## Running Tests
+
+Run the complete integration test suite with:
+
+```bash
+python -m pytest
+```
+
+The project includes **15 automated integration tests** covering:
+
+- User registration
+- User authentication
+- Protected endpoints
+- CRUD operations
+- Duplicate validation
+- Error handling
+
+---
+
 ## Project Structure
 
 ```text
@@ -105,6 +126,7 @@ Pharmacy_inventory/
 ├── database.py          # SQLAlchemy database operations
 ├── models.py            # SQLAlchemy models
 ├── auth.py              # Password hashing and JWT authentication
+├── test_api.py          # Pytest integration tests
 ├── requirements.txt
 ├── README.md
 └── .gitignore
@@ -127,9 +149,10 @@ Pharmacy_inventory/
 - [x] Refactor raw SQL to SQLAlchemy ORM
 - [x] Implement case-insensitive medicine searches
 - [x] Implement JWT authentication and protected endpoints
+- [x] Automated integration testing with pytest
 
 ### 🚧 Coming Next
 
-- [ ] Automated testing with pytest
+- [ ] Environment variables (.env)
 - [ ] Docker
 - [ ] Cloud deployment
